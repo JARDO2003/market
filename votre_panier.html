@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">        
+    <title>Mon Panier</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 20px;
+            text-align: center;
+        }
+        #cart {
+            margin-top: 20px;
+            border: 1px solid #ccc;
+            padding: 10px;
+            border-radius: 10px;
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        #cart-items {
+            margin-bottom: 10px;
+        }
+        .cart-item {
+            margin-bottom: 5px;
+        }
+        #contact-info {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Mon Panier</h1>
+    <div id="cart">
+        <h2>Articles ajoutés</h2>
+        <div id="cart-items"></div>
+        <div id="cart-total">
+            <strong>Total: </strong><span id="total-price">0</span> €
+        </div>
+        <div id="contact-info">
+            <label for="contact">Votre numéro WhatsApp ou Gmail :</label><br>
+            <input type="text" id="contact" placeholder="Entrez votre numéro ou email" required>
+        </div>
+        <button onclick="order()">Commander</button>
+    </div>
+
+    <script>
+        // Récupérer le panier depuis le localStorage
+        const cart = JSON.parse(localStorage.getItem('cart')) || [];
+        const totalPrice = localStorage.getItem('totalPrice') || 0;
+
+        // Afficher les articles du panier
+        const cartItems = document.getElementById('cart-items');
+        if (cart.length === 0) {
+            cartItems.innerHTML = '<p>Aucun article dans le panier</p>';
+        } else {
+            cart.forEach(item => {
+                cartItems.innerHTML += `<div class="cart-item">${item.product} - ${item.price}€</div>`;
+            });
+        }
+        document.getElementById('total-price').innerText = totalPrice; // Mettre à jour le prix total
+
+        // Fonction pour commander
+        function order() {
+            const contact = document.getElementById('contact').value; // Récupérer le numéro ou email
+            if (!contact) {
+                alert("Veuillez entrer votre numéro WhatsApp ou Gmail."); // Alerte si le champ est vide
+                return;
+            }
+
+            // Afficher un message de confirmation
+            alert(`Commande réussie !\nTotal : ${totalPrice}€\nContact : ${contact}`);
+            
+            // Effacer le panier après la commande réussie
+            localStorage.removeItem('cart');
+            localStorage.removeItem('totalPrice');
+
+            // Optionnel : Réinitialiser l'affichage
+            cartItems.innerHTML = '<p>Aucun article dans le panier</p>';
+            document.getElementById('total-price').innerText = '0'; // Réinitialiser le total
+            document.getElementById('contact').value = ''; // Réinitialiser le champ de contact
+        }
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-image: url(image/p1.jpg); /* Chemin vers l'image d'arrière-plan */
+        background-size: cover;
+        background-position: center;
+        color: white;
+    }
+    
+    header {
+        text-align: center;
+        padding: 50px;
+        background-color: rgba(0, 0, 0, 0.5);
+    }
+
+    h1 {
+        font-size: 48px;
+        margin: 0;
+    }
+
+    #sections {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    .section {
+        background-color: rgba(255, 255, 255, 0.8);
+        margin: 20px;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        text-align: center;
+        width: 200px; /* Largeur fixe pour les sections */
+    }
+
+    .section img {
+        width: 100%;
+        height: auto;
+        border-radius: 8px;
+    }
+
+    .section h3 {
+        margin: 10px 0;
+    }
+
+    .section button {
+        padding: 10px 15px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    .section button:hover {
+        background-color: #0056b3;
+    }

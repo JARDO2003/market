@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Votre Panier</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+    <style>
+        .container {
+            margin-top: 20px;
+        }
+        .article {
+            margin: 10px 0;
+        }
+        .contact-input {
+            margin: 20px 0;
+        }
+        .btn-commander {
+            margin-top: 20px;
+        }
+        .confirmation-message {
+            display: none;
+            color: green;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Votre Panier</h2>
+    <div id="liste-articles"></div>
+    <p>Total: <span id="total-panier">0</span> €</p>
+
+    <!-- Formulaire pour entrer les contacts -->
+    <div class="contact-input">
+        <label for="contact">Entrez votre contact WhatsApp ou Email :</label>
+        <input type="text" id="contact" class="form-control" placeholder="WhatsApp ou Email">
+    </div>
+
+    <!-- Bouton Commandé -->
+    <button class="btn btn-primary btn-commander" onclick="passerCommande()">Commandé</button>
+
+    <!-- Message de confirmation -->
+    <p class="confirmation-message" id="confirmation">Votre commande a été confirmée !</p>
+</div>
+
+<script>
+    // Récupérer les articles du panier stockés dans localStorage
+    let panier = JSON.parse(localStorage.getItem('panier')) || [];
+    let total = 0;
+
+    // Afficher la liste des articles sélectionnés et calculer le total
+    function afficherPanier() {
+        const listeArticles = document.getElementById('liste-articles');
+        panier.forEach(article => {
+            total += article.prix;
+            const divArticle = document.createElement('div');
+            divArticle.classList.add('article');
+            divArticle.innerHTML = <strong>${article.nom}</strong> - ${article.prix} €;
+            listeArticles.appendChild(divArticle);
+        });
+        document.getElementById('total-panier').innerText = total;
+    }
+
+    // Fonction pour passer la commande
+    function passerCommande() {
+        const contact = document.getElementById('contact').value;
+
+        if (!contact) {
+            alert('Veuillez entrer votre contact WhatsApp ou email.');
+            return;
+        }
+
+        // Afficher un message de confirmation et réinitialiser le panier
+        document.getElementById('confirmation').style.display = 'block';
+        localStorage.removeItem('panier');
+        panier = [];
+        document.getElementById('liste-articles').innerHTML = '';
+        document.getElementById('total-panier').innerText = '0';
+    }
+
+    // Afficher les articles au chargement de la page
+    afficherPanier();
+</script>
+
+</body>
+</html>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9806394790188568"
+     crossorigin="anonymous"></script>

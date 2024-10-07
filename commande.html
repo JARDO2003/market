@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Résumé de la Commande</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            padding: 20px;
+        }
+        #order-summary {
+            margin-top: 20px;
+            border: 1px solid #ccc;
+            padding: 10px;
+        }
+        #order-summary h2 {
+            margin: 0 0 10px;
+        }
+        .order-item {
+            margin-bottom: 5px;
+        }
+        #contact-info {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Résumé de la Commande</h1>
+    <div id="order-summary">
+        <h2>Articles Commandés</h2>
+        <div id="ordered-items"></div>
+        <div id="order-total">
+            <strong>Total : </strong><span id="total-price">0</span> €
+        </div>
+    </div>
+
+    <div id="contact-info">
+        <h2>Informations de Contact</h2>
+        <label for="contact-number">Numéro WhatsApp ou Email :</label>
+        <input type="text" id="contact-number" placeholder="Votre numéro WhatsApp ou email" />
+        <button id="confirm-order">Confirmer la Commande</button>
+    </div>
+
+    <script>
+        // Récupérer le panier depuis le localStorage
+        const cart = JSON.parse(localStorage.getItem('cart')) || [];
+        const totalPrice = localStorage.getItem('totalPrice') || 0;
+
+        // Afficher les articles commandés
+        const orderedItems = document.getElementById('ordered-items');
+        if (cart.length === 0) {
+            orderedItems.innerHTML = '<p>Aucun article commandé</p>';
+        } else {
+            cart.forEach(item => {
+                orderedItems.innerHTML += `<div class="order-item">${item.product} - ${item.price}€</div>`;
+            });
+        }
+        document.getElementById('total-price').innerText = totalPrice; // Mettre à jour le prix total
+
+        // Fonction pour confirmer la commande
+        document.getElementById('confirm-order').onclick = function() {
+            const contactInfo = document.getElementById('contact-number').value;
+            if (contactInfo) {
+                const message = `Commande validée avec succès !\nDétails :\n${cart.map(item => `${item.product} - ${item.price}€`).join('\n')}\nTotal : ${totalPrice}€\nContact : ${contactInfo}`;
+                
+                alert(message); // Afficher un message de confirmation
+
+                // Sauvegarder la commande dans le localStorage pour MCIO
+                const orders = JSON.parse(localStorage.getItem('orders')) || [];
+                orders.push({ items: cart, total: totalPrice, contact: contactInfo });
+                localStorage.setItem('orders', JSON.stringify(orders));
+
+                // Optionnel : vider le panier après la commande
+                localStorage.removeItem('cart');
+                localStorage.removeItem('totalPrice');
+
+                window.location.href = "marcio.html"; // Rediriger vers la page marcio.html
+            } else {
+                alert('Veuillez entrer votre numéro WhatsApp ou votre email.');
+            }
+        };
+    </script>
+</body>
+</html>
